@@ -27,7 +27,7 @@ The request body must be in JSON format and should include the following fields:
 ### Example Responce
 
 ### Success Response
-{
+`{
   "token": "JWT_TOKEN_HERE",
   "user": {
     "fullname": {
@@ -37,7 +37,7 @@ The request body must be in JSON format and should include the following fields:
     "email": "user@example.com",
     "password": "hashed_password_here"
   }
-}
+}`
 
 ### Error Responce
 
