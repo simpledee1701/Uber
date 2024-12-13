@@ -17,14 +17,12 @@ The request body must be in JSON format and should include the following fields:
 
 ### Example Request
  ```json
--{
   -"email": "user@example.com",
   -"fullname": {
     -"firstname": "John",
     -"lastname": "Doe"
   },
   -"password": "securepassword"
-}
 
 ### Example Responce
 
