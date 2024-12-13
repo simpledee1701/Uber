@@ -15,48 +15,26 @@ The request body must be in JSON format and should include the following fields:
   - `lastname` (string, optional): The last name of the user. It must be at least 3 characters long if provided.
 - `password` (string, required): The password for the user account. It must be at least 6 characters long.
 
-### Example Request
- ```json
-  - "email": "user@example.com",
-  - "fullname": {
-    - "firstname": "John",
-    - "lastname": "Doe"
-  },
-  - "password": "securepassword"
 
 ### Example Responce
 
 ### Success Response
-`{
-  "token": "JWT_TOKEN_HERE",
-  "user": {
-    "fullname": {
-      "firstname": "John",
-      "lastname": "Doe"
-    },
-    "email": "user@example.com",
-    "password": "hashed_password_here"
-  }
-}`
+- **Status Code:** `201 Created`
+- **Content:**
+  - **`token`**: JWT token for authentication.
+  - **`user`**: Object containing user details.
+    - **`fullname`**: 
+      - **`firstname`**: User's first name.
+      - **`lastname`**: User's last name.
+    - **`email`**: User's email address.
+    - **`password`**: Hashed password.
 
-### Error Responce
 
-{
-  "errors": [
-    {
-      "msg": "Invalid Email",
-      "param": "email",
-      "location": "body"
-    },
-    {
-      "msg": "Firstname Should be more than 3 characters",
-      "param": "fullname.firstname",
-      "location": "body"
-    },
-    {
-      "msg": "password must be 6 character long",
-      "param": "password",
-      "location": "body"
-    }
-  ]
-}
+
+### Error Responses
+- **Status Code:** `400 Bad Request`
+  - **Content:**
+    - **`errors`**: Array of error objects.
+      - **`msg`**: Error message.
+      - **`param`**: The parameter that caused the error.
+      - **`location`**: The location of the error (e.g., body).
