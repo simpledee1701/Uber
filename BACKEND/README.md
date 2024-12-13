@@ -16,14 +16,14 @@ The request body must be in JSON format and should include the following fields:
 - `password` (string, required): The password for the user account. It must be at least 6 characters long.
 
 ### Example Request
-```json
-{
-  "email": "user@example.com",
-  "fullname": {
-    "firstname": "John",
-    "lastname": "Doe"
+ ```json
+-{
+  -"email": "user@example.com",
+  -"fullname": {
+    -"firstname": "John",
+    -"lastname": "Doe"
   },
-  "password": "securepassword"
+  -"password": "securepassword"
 }
 
 ### Example Responce
