@@ -11,6 +11,16 @@ router.post('/register',[
     userController.registerUser
 )
 
+// creating of login route
+router.post('/login',[
+    body('email').isEmail().withMessage('Invalid Email'),
+    body('password').isLength({min:6}).withMessage('password must be 6 character long')
+],
+    userController.loginUser
+)
+
+// creating of profile route
+router.get('/profile',userController.getUserProfile)
 
 
 module.exports = router;

@@ -1,4 +1,4 @@
-# User Registration Endpoint
+# Backend API Docs
 
 ## Endpoint
 `POST /users/register`
@@ -16,7 +16,7 @@ The request body must be in JSON format and should include the following fields:
 - `password` (string, required): The password for the user account. It must be at least 6 characters long.
 
 
-### Example Responce
+### Responce
 
 ### Success Response
 - **Status Code:** `201 Created`
@@ -38,3 +38,44 @@ The request body must be in JSON format and should include the following fields:
       - **`msg`**: Error message.
       - **`param`**: The parameter that caused the error.
       - **`location`**: The location of the error (e.g., body).
+
+
+
+### Notes
+- Ensure that the email provided is unique and not already registered in the system.
+- Passwords are hashed before being stored in the database for security purposes.
+- The generated JWT token should be stored securely by the client for future authentication.
+
+---
+
+## User Login Endpoint
+
+### Endpoint
+`POST /users/login`
+
+### Description
+This endpoint allows an existing user to log in by providing their email and password. Upon successful login, a JSON Web Token (JWT) is generated and returned for authentication in subsequent requests.
+
+### Request Body
+The request body must be in JSON format and should include the following fields:
+
+- **`email`** (string, required): 
+  - The email address of the user.
+  - Must be a valid email format.
+
+- **`password`** (string, required): 
+  - The password for the user account.
+
+
+### Responses
+
+#### Success Response
+- **Status Code:** `200 OK`
+- **Content:**
+  - **`token`**: JWT token for authentication.
+  - **`user`**: Object containing user details.
+    - **`fullname`**: 
+      - **`firstname`**: User's first name.
+      - **`lastname`**: User's last name.
+    - **`email`**: User's email address.
+    - **`password`**: Hashed password.
