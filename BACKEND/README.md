@@ -79,3 +79,59 @@ The request body must be in JSON format and should include the following fields:
       - **`lastname`**: User's last name.
     - **`email`**: User's email address.
     - **`password`**: Hashed password.
+
+
+# User Profile Endpoint
+
+## Endpoint
+`GET /users/profile`
+
+## Description
+This endpoint retrieves the profile information of the authenticated user. It returns the user's details such as their name and email.
+
+## Authentication Required
+Yes (uses `authMiddleware`)
+
+## Request Headers
+- **`Authorization`** (string, required): Bearer token (JWT) for authentication.
+
+## Responses
+
+### Success Response
+- **Status Code:** `200 OK`
+- **Content:**
+  ```json
+  {
+      "id": "user_id",
+      "fullname": {
+          "firstname": "John",
+          "lastname": "Doe"
+      },
+      "email": "john.doe@example.com"
+      // other user fields...
+  }
+
+## User Logout Endpoint
+
+### Endpoint
+`GET /users/logout`
+
+### Description
+This endpoint logs out the authenticated user by clearing the authentication token from the cookies and adding it to a blacklist to prevent further use.
+
+### Authentication Required
+Yes (uses `authMiddleware`)
+
+### Request Headers
+- **`Authorization`** (string, required): Bearer token (JWT) for authentication.
+
+### Responses
+
+#### Success Response
+- **Status Code:** `200 OK`
+- **Content:**
+  ```json
+  {
+      "message": "Logged out successfully"
+  }
+
