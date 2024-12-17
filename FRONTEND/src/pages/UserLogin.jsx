@@ -1,28 +1,59 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { useState } from 'react'
-
-
+import React, { useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { UserDataContext } from '../context/UserContext';
 
 const UserLogin = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [userData, setUserData] = useState({});
-    const submitHandler = (e) => {
-        e.preventDefault();
-        setUserData({email: email, password: password});
-        setEmail('');
-        setPassword('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const { setUser } = useContext(UserDataContext);
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      setError('Email and password are required.');
+      return;
     }
+
+    try {
+      const userData = { email, password };
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/users/login`,
+        userData
+      );
+
+
+      if (response.status === 200) {
+        const data = response.data;
+        setUser(data.user);
+        localStorage.setItem('token', data.token);
+        navigate('/home');
+      }
+    } catch (error) {
+      // Handle errors
+      if (error.response && error.response.data) {
+        setError(error.response.data.message || 'Invalid Email or Password');
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+      }
+      console.error('Error during login:', error); // Debugging logs
+    }
+
+    setEmail('');
+    setPassword('');
+  };
   return (
     <div className='p-7 flex flex-col h-screen justify-between'>
         <div>
         <img className='w-16 mb-10' src='https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Uber_logo_2018.png/800px-Uber_logo_2018.png'></img>
         <form onSubmit={(e) => 
             {submitHandler(e);
-            e.preventDefault();
             }} 
-            action="">
+            >
             <h3 className='text-lg font-medium mb-2 '>What's your email</h3>
             <input 
             value={email}

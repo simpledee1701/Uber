@@ -1,5 +1,10 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { UserDataContext } from '../context/UserContext'
+
+
+
 
 const UserSignup = () => {
   const [email, setEmail] = useState('');
@@ -11,32 +16,54 @@ const UserSignup = () => {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false); // Toggle password visibility
 
-  const submitHandler = (e) => {
-    e.preventDefault();
+  const navigate = useNavigate();
+  const { user, setUser } = useContext(UserDataContext);
 
+  const submitHandler = async (e) => {
+    e.preventDefault();
+  
     // Password validation
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
     }
-
-    setUserData({
-      fullName: {
-        firstName: firstName,
-        lastName: lastName,
+  
+    const newUser = {
+      fullname: {
+        firstname: firstName,
+        lastname: lastName,
       },
-      email: email,
-      password: password,
-    });
-
-
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
-    setFirstName('');
-    setLastName('');
-    setError(''); // Clear error message if successful
+      email,
+      password,
+    };
+  
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/users/register`,
+        newUser
+      );
+  
+      if (response.status === 201) {
+        const data = response.data;
+        setUser(data.user);
+        localStorage.setItem('token', data.token);
+        navigate('/home');
+      }
+    } catch (error) {
+      // Handle Axios error
+      if (error.response) {
+        // Server responded with a status other than 2xx
+        setError(error.response.data.message || 'Failed to register. Please try again.');
+      } else if (error.request) {
+        // No response received
+        setError('No response from the server. Please try again.');
+      } else {
+        // Other errors
+        setError(error.message);
+      }
+    }
   };
+  
 
   return (
     <div className="p-7 flex flex-col h-screen justify-between">
@@ -46,7 +73,7 @@ const UserSignup = () => {
           src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Uber_logo_2018.png/800px-Uber_logo_2018.png"
           alt="Uber Logo"
         />
-        <form onSubmit={submitHandler}>
+        <form  onSubmit={(e) => submitHandler(e)}>
           <h3 className="text-base font-medium mb-2">What's your Name</h3>
           <div className="flex gap-4 mb-5">
             <input
@@ -118,7 +145,8 @@ const UserSignup = () => {
 
           <button
             className="bg-black text-white font-bold rounded w-full mt-7 text-lg px-4 py-3 hover:bg-black/80"
-            type="submit"
+            type='submit'
+
           >
             Signup
           </button>
