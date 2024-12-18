@@ -4,6 +4,10 @@ import {useGSAP} from '@gsap/react'
 import { gsap } from 'gsap';
 import 'remixicon/fonts/remixicon.css';
 import LocationSearchPanel from '../components/LocationSearchPanel';
+import VehiclePanel from '../components/VehiclePanel';
+import ConfirmedRide from '../components/ConfirmedRide';
+import LookingForDriver from '../components/LookingForDriver';
+import WaitForDriver from '../components/WaitForDriver';
 
 const Home = () => {
   const [pickup, setPickup] = useState('');
@@ -11,8 +15,15 @@ const Home = () => {
   const [panelOpen, setPanelOpen] = useState(false);
   const panelRef = React.useRef(null);
   const vehiclePanelRef = React.useRef(null);
+  const vehicleFoundRef = React.useRef(null);
+  const waitForDriverRef = React.useRef(null);
+  const confirmedRidePanelRef = React.useRef(null);
   const panelCloseRef = React.useRef(null);
   const [vehiclePanelOpen, setVehiclePanelOpen] = useState(false);
+  const [confirmedRidePanel, setConfirmedRidePanel] = useState(false);
+  const [vehicleFound, setVehicleFound] = useState(false);
+  const [waitForDriver, setWaitForDriver] = useState(false);
+
   const submitHandler=(e)=>{
     e.preventDefault();
   }
@@ -47,6 +58,45 @@ const Home = () => {
       })
     }
     },[vehiclePanelOpen])
+
+    useGSAP(function(){
+      if(confirmedRidePanel){
+        gsap.to(confirmedRidePanelRef.current, {
+          transform: 'translateY(0%)'
+        })
+      }
+      else{
+        gsap.to(confirmedRidePanelRef.current, {
+          transform: 'translateY(100%)'
+        })
+      }
+      },[confirmedRidePanel])
+
+      useGSAP(function(){
+        if(vehicleFound){
+          gsap.to(vehicleFoundRef.current, {
+            transform: 'translateY(0%)'
+          })
+        }
+        else{
+          gsap.to(vehicleFoundRef.current, {
+            transform: 'translateY(100%)'
+          })
+        }
+        },[vehicleFound])
+
+        useGSAP(function(){
+          if(waitForDriver){
+            gsap.to(waitForDriverRef.current, {
+              transform: 'translateY(0%)'
+            })
+          }
+          else{
+            gsap.to(waitForDriverRef.current, {
+              transform: 'translateY(100%)'
+            })
+          }
+          },[waitForDriver])
     
 
   return (
@@ -90,37 +140,19 @@ const Home = () => {
       </div>
 
       <div ref={vehiclePanelRef} className='fixed z-10 bottom-0 translate-y-full bg-white px-3 py-6 w-full'>
-        <h2 className='font-semibold text-2xl mb-5'>Choose a vehicle</h2>
+      <VehiclePanel setConfirmedRidePanel={setConfirmedRidePanel} setVehiclePanelOpen={setVehiclePanelOpen}/>
+      </div>
 
-          <div className='flex border-2 active:border-gray-600 rounded-xl items-center justify-between w-full p-3 mb-2'>
-            <img className='h-10' src="https://cdn.pixabay.com/photo/2015/10/01/17/17/car-967387_1280.png" alt="" />
-            <div className='w-1/2 ml-2'>
-              <h4 className='font-medium text-base'>UberGo <span><i className='ri-user-3-fill'></i>4</span></h4>
-              <h5 className='font-medium text-sm'>2 min away</h5>
-              <p className='font-normal text-xs text-gray-600'>Affordable compact rides</p>
-            </div>
-            <h2 className='text-xl font-semi-bold'> ₹193.20</h2>
-          </div>
+      <div ref={confirmedRidePanelRef} className='fixed z-10 bottom-0 translate-y-full bg-white px-3 py-6 w-full'>
+          <ConfirmedRide setConfirmedRidePanel={setConfirmedRidePanel} setVehicleFound={setVehicleFound} />
+      </div>
 
-          <div className='flex border-2 active:border-gray-600 rounded-xl items-center  justify-between w-full p-3 mb-2'>
-            <img className='h-12' src="https://www.pngplay.com/wp-content/uploads/7/Yellow-Motorcycle-Bike-PNG-HD-Quality.png" alt="" />
-            <div className='w-1/2 ml-8'>
-              <h4 className='font-medium text-base'>Moto <span><i className='ri-user-3-fill'></i>1</span></h4>
-              <h5 className='font-medium text-sm'>3 min away</h5>
-              <p className='font-normal text-xs text-gray-600'>Affordable motorcycle rides</p>
-            </div>
-            <h2 className='text-xl font-semi-bold'> ₹65.20</h2>
-          </div>
+      <div ref={vehicleFoundRef} className='fixed z-10 bottom-0 translate-y-full bg-white px-3 py-6 w-full'>
+          <LookingForDriver setVehicleFound={setVehicleFound} />
+      </div>
 
-          <div className='flex border-2 active:border-gray-600 rounded-xl items-center  justify-between w-full p-3'>
-            <img className='h-12' src="https://i.pinimg.com/736x/43/2f/6d/432f6d0df7b4fa8ebfa2212c8a34ca8e.jpg" alt="" />
-            <div className='w-1/2 ml-10'>
-              <h4 className='font-medium text-base'>Auto <span><i className='ri-user-3-fill'></i>3</span></h4>
-              <h5 className='font-medium text-sm'>1 min away</h5>
-              <p className='font-normal text-xs text-gray-600'>Affordable auto rides</p>
-            </div>
-            <h2 className='text-xl font-semi-bold'> ₹85.20</h2>
-          </div>
+      <div ref={waitForDriverRef} className='fixed z-10 bottom-0  bg-white px-3 py-6 w-full'>
+          <WaitForDriver waitForDriver={waitForDriver} />
       </div>
 
     </div>
