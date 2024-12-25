@@ -44,7 +44,7 @@ const CaptainHome = () => {
     <div className='h-screen'> 
     <div>
       <img src="" alt="" />
-      <Link to={'/home'} className='fixed h-10 w-10 bg-white flex items-center justify-center rounded-full top-5 right-5'>
+      <Link to={'/login'} className='fixed h-10 w-10 bg-white flex items-center justify-center rounded-full top-5 right-5'>
         <i className='ri-logout-box-r-line text-3xl'></i>
     </Link>
     </div>

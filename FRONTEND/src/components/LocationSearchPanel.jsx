@@ -1,28 +1,30 @@
 import React from 'react'
 
-const LocationSearchPanel = (props) => {
+const LocationSearchPanel = ({ suggestions, setVehiclePanelOpen, setPanelOpen, setPickup, setDestination, activeField }) => {
 
-
-    const locations = ["BMS Boys Hostel near basavanagudi temple",
-        "BMS Boys Hostel near basavanagudi temple",
-        "BMS Boys Hostel near basavanagudi temple",
-    ]
-
-  return (
-    <div>
-        {
-            locations.map(function(location,ke){
-                return <div key={ke} onClick={()=>{
-                    props.setVehiclePanelOpen(true);
-                    props.setPanelOpen(false);
-                }} className='flex items-center  active:bg-gray-200 m-3 rounded-xl gap-3 p-2'>
-                <h2 className='bg-[#eee] h-10 w-14 flex items-center justify-center rounded-full'><i className='ri-map-pin-fill'></i></h2>
-                <h4 className='font-semibold'>{location}</h4>
-             </div>
-            })
+    const handleSuggestionClick = (suggestion) => {
+        if (activeField === 'pickup') {
+            setPickup(suggestion)
+        } else if (activeField === 'destination') {
+            setDestination(suggestion)
         }
-    </div>
-  )
+        // setVehiclePanel(true)
+        // setPanelOpen(false)
+    }
+
+    return (
+        <div>
+            {/* Display fetched suggestions */}
+            {
+                suggestions.map((elem, idx) => (
+                    <div key={idx} onClick={() => handleSuggestionClick(elem)} className='flex gap-4 border-2 p-3 border-gray-50 active:border-black rounded-xl items-center my-2 justify-start'>
+                        <h2 className='bg-[#eee] h-8 flex items-center justify-center w-12 rounded-full'><i className="ri-map-pin-fill"></i></h2>
+                        <h4 className='font-medium'>{elem}</h4>
+                    </div>
+                ))
+            }
+        </div>
+    )
 }
 
 export default LocationSearchPanel
