@@ -9,15 +9,18 @@ import ConfirmRidePopUp from '../components/ConfirmRidePopUp'
 import { useEffect,useContext } from 'react'
 import { SocketContext } from '../context/SocketContext'
 import { CaptainDataContext } from '../context/CaptainContext'
+import axios from 'axios';
+
 
 
 const CaptainHome = () => {
   const ridePopUpRef = React.useRef(null);
   const confirmRidePopUpRef = React.useRef(null);
-  const [ridePopUp, setRidePopUp] = React.useState(true)
+  const [ridePopUp, setRidePopUp] = React.useState(false)
   const [confirmRidePopUp, setConfirmRidePopUp] = React.useState(false)
   const {socket} = React.useContext(SocketContext);
   const {captain} = useContext(CaptainDataContext);
+  const [ride, setRide] = useState(null);
 
   useEffect(() => {
 
@@ -26,17 +29,42 @@ const CaptainHome = () => {
     const updateLocation = () => {
       if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(position => {
+          
+
           socket.emit('update-location-captain', 
-            {latitude:position.coords.latitude,
-              longitude:position.coords.longitude,
+            {
+              location : {ltd:position.coords.latitude,
+                          lng:position.coords.longitude},
               userId:captain._id
             });
       });
       }
   }
 
+
+  const locationInterval = setInterval(updateLocation, 10000);
+  updateLocation();
+
   },[captain])
 
+  socket.on('new-ride', (data) => {
+    console.log(data);
+    setRide(data);
+    setRidePopUp(true);
+  });
+
+  async function confirmRide(){
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/confirm`,{
+      rideId:ride._id,
+      captain:captain._id
+    },{
+      headers:{
+        Authorization:`Bearer ${localStorage.getItem('token')}`
+      }
+    });
+      setConfirmRidePopUp(true);
+      setRidePopUp(false);
+  }
   
 
   useGSAP(function(){
@@ -80,7 +108,12 @@ const CaptainHome = () => {
        <CaptainDetails />
         </div>
         <div ref={ridePopUpRef}  className='fixed z-10 bottom-0 translate-y-full  bg-white px-3 py-6 w-full'>
-          <RidePopUp setRidePopUp={setRidePopUp} setConfirmRidePopUp={setConfirmRidePopUp} />
+          <RidePopUp 
+          ride={ride} 
+          setRidePopUp={setRidePopUp} 
+          setConfirmRidePopUp={setConfirmRidePopUp}
+          confirmRide = {confirmRide}
+           />
       </div>
 
       <div ref={confirmRidePopUpRef}  className='fixed z-10 bottom-0 h-screen translate-y-full  bg-white px-3 py-6 w-full'>
