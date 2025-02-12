@@ -6,6 +6,9 @@ import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap';
 import { useState } from 'react'
 import ConfirmRidePopUp from '../components/ConfirmRidePopUp'
+import { useEffect,useContext } from 'react'
+import { SocketContext } from '../context/SocketContext'
+import { CaptainDataContext } from '../context/CaptainContext'
 
 
 const CaptainHome = () => {
@@ -13,6 +16,28 @@ const CaptainHome = () => {
   const confirmRidePopUpRef = React.useRef(null);
   const [ridePopUp, setRidePopUp] = React.useState(true)
   const [confirmRidePopUp, setConfirmRidePopUp] = React.useState(false)
+  const {socket} = React.useContext(SocketContext);
+  const {captain} = useContext(CaptainDataContext);
+
+  useEffect(() => {
+
+    socket.emit('join', {userType:'captain',userId:captain._id});
+
+    const updateLocation = () => {
+      if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(position => {
+          socket.emit('update-location-captain', 
+            {latitude:position.coords.latitude,
+              longitude:position.coords.longitude,
+              userId:captain._id
+            });
+      });
+      }
+  }
+
+  },[captain])
+
+  
 
   useGSAP(function(){
     if(ridePopUp){

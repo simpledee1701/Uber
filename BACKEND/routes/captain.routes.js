@@ -7,7 +7,7 @@ const authMiddleware = require('../middlewares/auth.middleware');
 router.post('/register',[
     body('email').isEmail().withMessage('Invalid Email'),
     body('fullname.firstname').isLength({min:3}).withMessage('Firstname Should be more than 3 characters'),
-    body('password').isLength({min:6}).withMessage('password must be 6 character long'),
+    body('password').isLength({min:3}).withMessage('password must be 3 character long'),
     body('vehicle.color').isLength({min:3}).withMessage('color Should be more than 3 characters'),
     body('vehicle.plate').isLength({min:3}).withMessage('plateNumber Should be more than 3 characters'),
     body('vehicle.capacity').isLength({min:1}).withMessage('capacity Should be more than 3 characters'),
@@ -19,7 +19,7 @@ router.post('/register',[
 
 router.post('/login',[
     body('email').isEmail().withMessage('Invalid Email'),
-    body('password').isLength({min:6}).withMessage('password must be 6 character long')
+    body('password').isLength({min:3}).withMessage('password must be 6 character long')
 ],
     captainController.loginCaptain
 )

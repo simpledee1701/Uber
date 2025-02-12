@@ -12,7 +12,7 @@ const captainSchema = new mongoose.Schema({
         lastname:{
             type:String,
             required:true,
-            minlength: [3,'lastname should be atleast 3 characters'],
+            minlength: [1,'lastname should be atleast 1 characters'],
         },
         },
     email:{
@@ -57,7 +57,7 @@ const captainSchema = new mongoose.Schema({
         }
         },
     location:{
-        lat:{
+        ltd:{
             type:Number,
         },
         lng:{
